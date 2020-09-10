@@ -1,3 +1,9 @@
+/**
+ * @author daspikeyboss
+ * 
+ * @classdesc Class dedicated to loading scripts and libraries.
+ */
+
 class LibraryLoader {
 
   static scriptsToLoad = [];
@@ -6,6 +12,12 @@ class LibraryLoader {
 
   static loadingScript = false;
 
+  /**
+   * Loads a script.
+   * 
+   * @param {string} script The URL of the script that needs to be loaded.
+   * @param {function} callback The function that will be called when the script has finished loading.
+   */
   static LoadScript(script, callback) {
     this.callbacks[this.scriptsToLoad.length] = callback;
     this.scriptsToLoad.push(script);
@@ -13,6 +25,26 @@ class LibraryLoader {
       this._LoadNextScript();
   }
 
+  /**
+   * Loads multiple scripts.
+   * 
+   * @param {Array} scripts 
+   * @param {function} callback 
+   */
+  static LoadScripts(scripts, callback) {
+
+    for (let script of scripts) {
+      this.scriptsToLoad.push(script);
+    }
+
+    this.callbacks[this.scriptsToLoad.length - 1] = callback;
+    if(!this.loadingScript)
+      this._LoadNextScript();
+  }
+
+  /**
+   * Loads the next script in the list of scripts to load.
+   */
   static _LoadNextScript() {
     this.loadingScript = true;
     let tag = document.createElement("script");
@@ -21,6 +53,9 @@ class LibraryLoader {
     document.head.insertAdjacentElement('beforeEnd', tag);
   }
 
+  /**
+   * When a scpript has finished loading this begins loading the next script and calls the callback function.
+   */
   static _ScriptLoaded() {
     let callback = this.callbacks[0];
     this.scriptsToLoad.shift();
@@ -36,18 +71,14 @@ class LibraryLoader {
       callback();
   }
 
-  static LoadScripts(scripts, callback) {
 
-    for (let script of scripts) {
-      this.scriptsToLoad.push(script);
-    }
-
-    this.callbacks[this.scriptsToLoad.length - 1] = callback;
-    if(!this.loadingScript)
-      this._LoadNextScript();
-  }
-
-  static LoadLibrary(callback, libraryLocation) {
+  /**
+   * Loads the DaSpikeyBossLibrary V2
+   * 
+   * @param {string} libraryLocation The location of the library relative to the project.
+   * @param {function} callback The function to be called when the library has finished loading.
+   */
+  static LoadLibrary(libraryLocation, callback) {
     let stl = ['../com.daspikeyboss/Management/ProgramManager.js',
     '../com.daspikeyboss/Management/Loop.js',
     '../com.daspikeyboss/Management/Display.js',
@@ -87,6 +118,9 @@ class LibraryLoader {
     this.LoadScripts(stl, this.LoadLibraryFinished.bind(this));
   }
 
+  /**
+   * Sets up the ProgramManager and calls the callback function when the library has finished loading.
+   */
   static LoadLibraryFinished() {
     ProgramManager.Setup();
     this.libraryCallback();
