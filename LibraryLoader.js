@@ -1,4 +1,5 @@
 class LibraryLoader {
+
   static scriptsToLoad = [];
   static callbacks = [];
   static libraryCallback = "";
@@ -46,7 +47,7 @@ class LibraryLoader {
       this._LoadNextScript();
   }
 
-  static LoadLibrary(callback) {
+  static LoadLibrary(callback, libraryLocation) {
     let stl = ['../com.daspikeyboss/Management/ProgramManager.js',
     '../com.daspikeyboss/Management/Loop.js',
     '../com.daspikeyboss/Management/Display.js',
