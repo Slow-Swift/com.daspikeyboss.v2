@@ -1,4 +1,21 @@
+/**
+ * @class Random
+ * 
+ * @author daspikeyboss
+ * 
+ * @classdesc Provides functions for dealing with random numbers.
+ */
 class Random {
+
+  /**
+   * Returns a random number between [min] and [max].
+   * 
+   * @param {number} max The maximum end of the range (exclusive).
+   * @param {number} min The minimum end of the range (inclusive).
+   * @param {boolean} whole Should the number be a whole number?
+   * 
+   * @returns {number} A random number.
+   */
   Random(max, min, whole) {
     //organize max and min
     let max2 = Math.max(max, min);
