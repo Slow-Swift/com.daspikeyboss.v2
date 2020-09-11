@@ -1,5 +1,20 @@
+/**
+ * @class Loop
+ * 
+ * @author daspikeyboss
+ * 
+ * @classdesc Handles the main loop.
+ */
 class Loop {
-  static Subscribe(callback, late, zOrder = 0.5) {
+
+  /**
+   * Subscribe [callback] to Update() or LateUpdate().
+   * 
+   * @param {function} callback The function that is subscribing to the loop.
+   * @param {boolean} late Is the subscription to the LateUpdate (true) or Update (false)
+   * @param {number} zOrder The execution order of the function
+   */
+  static Subscribe(callback, late = false, zOrder = 0.5) {
     //subscribing to the late update?
     if(!late) {
       if(!this.subscribedUpdate.includes(callback) &&
@@ -18,6 +33,13 @@ class Loop {
     this.SortForZOrders();
   }
 
+
+  /**
+   * Unsubscribe [callback] from Update or LateUpdate
+   * 
+   * @param {function} callback The function that is unsubscribing from the loop.
+   * @param {boolean} late Is the function unsubscribing from LateUpdate (true) or Update (false).
+   */
   static Unsubscribe(callback, late) {
     //unsubscribing from the late update?
     if(!late) {
@@ -44,10 +66,16 @@ class Loop {
   static boundLoop = this.loop.bind(this);
   static _closing = false;
 
+  /**
+   * Stops the loop.
+   */
   static Cleanup() {
     this._closing = true;
   }
 
+  /**
+   * The main loop
+   */
   static loop() {
     this.PrepareNewFrame();
     for (let callback of this.subscribedUpdate) {
@@ -65,17 +93,24 @@ class Loop {
     this.CleanupOldFrame();
   }
 
+  /**
+   * Prepeare rendering for a new Frame.
+   */
   static PrepareNewFrame() {
     display.ClearDisplay();
     camera.MoveCtxOut();
   }
 
+  /**
+   * Clean up from the old Frame.
+   */
   static CleanupOldFrame() {
     camera.MoveCtxBack();
     this.newlySubscribed.length = [];
     this.newlyLateSubscribed.length = [];
   }
 
+  //Sort the subscriptions by their zOrders.
   static SortForZOrders() {
     let subscribedUpdate = ArrayTools.CloneArray(this.subscribedUpdate);
     let subscribedUpdateZ = ArrayTools.CloneArray(this.subscribedUpdateZ);
