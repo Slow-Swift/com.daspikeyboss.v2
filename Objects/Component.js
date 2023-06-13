@@ -1,21 +1,21 @@
 /**
  * @class Component
- * 
+ *
  * @author daspikeyboss
- * 
- * @classdesc The base class for components that can be added to Objects.
+ *
+ * @classdesc The base class for components that can be added to GameObjects.
  */
 class Component {
 
   /**
    * @constructor
-   * 
-   * @param {Object} object The object that the component will be attatched to. If missing a new Object will be created.
+   *
+   * @param {GameObject} object The GameObject that the component will be attatched to. If missing a new GameObject will be created.
    * @param {number} zOrder The order for script execution. Higher zOrders get executed first.
    */
   constructor(object=null, zOrder = 0.5) {
-    if(!(object instanceof Object)) {
-      object = new Object(object, Vector2.Zero, 0, Vector2.One);
+    if(!(object instanceof GameObject)) {
+      gameobject = new GameObject(object, Vector2.Zero, 0, Vector2.One);
     }
     this.zOrder = zOrder;
     this.bndUpdate = this.Update.bind(this);
@@ -28,14 +28,14 @@ class Component {
   }
 
   /**
-   * Attatch this component to [object]
-   * 
-   * @param {Object} object The object to attatch this component to.
+   * Attatch this component to [gameobject]
+   *
+   * @param {GameObject} gameobject The GameObject to attatch this component to.
    */
-  AddToObject(object) {
-    object.AddComponent(this);
-    this.object = object;
-    this.transform = object.transform;
+  AddToObject(gameobject) {
+    gameobject.AddComponent(this);
+    this.gameobject = gameobject;
+    this.transform = gameobject.transform;
     this._active = true;
 
     this._SubscribeToUpdates();
@@ -76,21 +76,21 @@ class Component {
 
   /**
    * Called when the Object first enters into a collision with another Object.
-   * 
+   *
    * @param {Collider2D} other The collider that was hit.
    */
   OnCollisionEnter(other) {}
 
   /**
    * Called each frame that the Object is collided with another Object.
-   * 
+   *
    * @param {Collider2D} other The collider that was hit.
    */
   OnCollision(other) {}
 
   /**
    * Called when the Object exits a collision with another Object.
-   * 
+   *
    * @param {Collider2D} other The collider that was hit.
    */
   OnCollisionExit(other) {}
@@ -107,7 +107,7 @@ class Component {
 
   /**
    * Called when the display changes size.
-   * 
+   *
    * @param {Vector2} oldSize The size that the display used to be.
    */
   OnDisplayResized(oldSize) {}
@@ -116,7 +116,7 @@ class Component {
 
 /**
  * Activates / Deactivates the component based on [active].
- * 
+ *
  * @param {boolean} active Should the component be Activated (true) / Deactivate (false).
  */
   SetActive(active) {
@@ -144,8 +144,8 @@ class Component {
 
   /**
    * Honestly Not Sure what this is.
-   * 
-   * @param {boolean} active 
+   *
+   * @param {boolean} active
    */
   SetActiveByObject(active) {
     if(active) {
@@ -163,10 +163,10 @@ class Component {
 
   /**
    * Make sure the Object has a component of type [type] attatched.
-   * 
+   *
    * @param {Type} type The type of Component that is required.
    * @param  {...any} args The arguments that should be used if creating a new component is required.
-   * 
+   *
    * @returns the new component that has been created if there was no component of the required type originally.
    *
    */

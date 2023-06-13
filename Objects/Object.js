@@ -1,14 +1,14 @@
 /**
- * @class Object
- * 
+ * @class GameObject
+ *
  * @author daspikeyboss
- * 
+ *
  * @classdesc A GameObject setup with a transform that can have other components added.
  */
 
  //TODO: Change The class to be called GameObject (iss 1).
 
-class Object {
+class GameObject {
   collisions = [];
   oldCollisions = [];
   components = [];
@@ -17,40 +17,40 @@ class Object {
 
   /**
    * @constructor
-   * 
-   * Creates a new Object and registers it with ObjectManagement.
-   * 
-   * @param {string} name The name of the Object.
-   * @param {Vector2} position The position of the Object.
-   * @param {number} rotation The rotation of the Object.
-   * @param {Vector2} scale The scale of the Object.
+   *
+   * Creates a new GameObject and registers it with ObjectManagement.
+   *
+   * @param {string} name The name of the GameObject.
+   * @param {Vector2} position The position of the GameObject.
+   * @param {number} rotation The rotation of the GameObject.
+   * @param {Vector2} scale The scale of the GameObject.
    */
   constructor(name, position, rotation, scale) {
     this.name = name;
     this.tag = "";
     this.layer = "Default Layer";
     this.transform = new Transform2D(position, rotation, scale);
-    this.transform.object = this;
+    this.transform.gameobject = this;
     this.active = true;
     this.bndUpdate = this.Update.bind(this);
     this._SubAndUnsub();
-    this.object = this;
+    this.gameobject = this;
     ObjectManagement.AddObject(this);
   }
 
   /**
-   * Add [component] to the Object
-   * 
-   * @param {Component} component The componenet to be added to the Object.
+   * Add [component] to the GameObject
+   *
+   * @param {Component} component The componenet to be added to the GameObject.
    */
   AddComponent(component) {
     this.components.push(component);
   }
 
   /**
-   * Remove [component] from the Object.
-   * 
-   * @param {Component} component The component to be removed from the Object.
+   * Remove [component] from the GameObject.
+   *
+   * @param {Component} component The component to be removed from the GameObject.
    */
   RemoveComponent(component) {
     let index = this.components.indexOf(component);
@@ -58,11 +58,11 @@ class Object {
   }
 
   /**
-   * Returns the component of type [type] if the Object has one attatched.
-   * 
+   * Returns the component of type [type] if the GameObject has one attatched.
+   *
    * @param {Type} type The type of component that is needed.
-   * 
-   * @returns {Component | Null} the attatched component of type [type], null if there is no attatched 
+   *
+   * @returns {Component | Null} the attatched component of type [type], null if there is no attatched
    * component of that type.
    */
   FindComponentOfType(type) {
@@ -75,9 +75,9 @@ class Object {
   }
 
   /**
-   * Activates / Deactivates the Object bast on [active].
-   * 
-   * @param {boolean} active Should the Object be Activated (true) or Deactivated (false).
+   * Activates / Deactivates the GameObject bast on [active].
+   *
+   * @param {boolean} active Should the GameObject be Activated (true) or Deactivated (false).
    */
   SetActive(active) {
     this.active = active;
@@ -88,7 +88,7 @@ class Object {
   }
 
   /**
-   * Subscribes and Unsubrbes the Update method on the Object based on the Objects active state.
+   * Subscribes and Unsubrbes the Update method on the GameObject based on the GameObjects active state.
    */
   _SubAndUnsub() {
     if(this.active) {
@@ -99,14 +99,14 @@ class Object {
   }
 
   /**
-   * Called every frame that the Object is active.
+   * Called every frame that the GameObject is active.
    */
   Update() {
     this.WorkCollisions();
   }
 
   /**
-   * Check for collisions with other objects and call the related methods in all attatched Components.
+   * Check for collisions with other GameObjects and call the related methods in all attatched Components.
    */
   WorkCollisions() {
     for (let collision of this.collisions) {
@@ -163,7 +163,7 @@ class Object {
 
   /**
    * When the screen is resized, call the related methods in all attatched components.
-   * 
+   *
    * @param {Vector2} oldSize The size the screen used to be.
    */
   OnDisplayResized(oldSize) {
